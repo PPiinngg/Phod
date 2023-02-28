@@ -1,0 +1,11 @@
+[package]
+name = "phod"
+description = "physical modelling playground"
+version = "0.1.0"
+edition = "2021"
+
+# TODO:
+# Karplus
+
+[dependencies]
+raylib = "3.7.0"

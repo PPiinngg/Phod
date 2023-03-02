@@ -1,15 +1,20 @@
-use raylib::prelude::*;
+use std::{
+	sync::{Arc, Mutex},
+	thread,
+	time::Duration,
+};
 
-mod dsp;
-mod synth;
+mod audio;
+mod ui;
 
 fn main() {
-	let (mut rl, thread) = raylib::init().size(640, 480).title("Hello, World").build();
+	let thread_ui = thread::spawn(|| {
+		ui::ui_main();
+	});
 
-	while !rl.window_should_close() {
-		let mut d = rl.begin_drawing(&thread);
+	let _thread_audio = thread::spawn(|| {
+		audio::audio_main();
+	});
 
-		d.clear_background(Color::WHITE);
-		d.draw_text("Hello, world!", 12, 12, 20, Color::BLACK);
-	}
+	thread_ui.join().expect("ui thread join shat itself");
 }

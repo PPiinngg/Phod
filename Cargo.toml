@@ -1,11 +1,15 @@
 [package]
 name = "phod"
 description = "physical modelling playground"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
 
 # TODO:
-# Karplus
+# Shaders in raylib
+# Approximate ui
+# Create Lowpass and Highpass filters
+# Create Karplus generator
 
 [dependencies]
 raylib = "3.7.0"
+cpal = "0.15.0"

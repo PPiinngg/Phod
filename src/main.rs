@@ -8,7 +8,7 @@ mod ui;
 // struct 
 
 fn main() {
-	let buttonpressed = AtomicCell::new(0.0_f32);
+	let buttonpressed: AtomicCell<f32> = AtomicCell::new(0.0_f32);
 
 	let thread_ui = thread::spawn(|| {
 		ui::ui_main(&buttonpressed);

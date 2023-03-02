@@ -14,7 +14,7 @@ macro_rules! str2cstr {
 	};
 }
 
-pub fn ui_main(buttonval: &AtomicCell<f32>) {
+pub fn ui_main<'a>(buttonval: &'a AtomicCell<f32>) {
 	let (mut rl, thread) = raylib::init()
 		.size(640, 480)
 		.title(format!("Phod [v{}b]", env!("CARGO_PKG_VERSION")).as_str())

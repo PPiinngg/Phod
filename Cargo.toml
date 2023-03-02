@@ -8,8 +8,8 @@ edition = "2021"
 # Shaders in raylib
 # Approximate ui
 # Create Lowpass and Highpass filters
-# Create Karplus generator
 
 [dependencies]
 raylib = "3.7.0"
 cpal = "0.15.0"
+crossbeam-utils = "0.8.15"

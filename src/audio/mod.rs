@@ -1,14 +1,27 @@
+use std::sync::Arc;
+
 use cpal::{
 	traits::{DeviceTrait, HostTrait, StreamTrait},
 	Data,
 };
 use crossbeam_utils::atomic::AtomicCell;
 
+use crate::GlobalState;
+
 use self::karplus::DelayModule;
 mod dsp;
 mod karplus;
 
-pub fn audio_main<'a>(buttonval: &'a AtomicCell<f32>) {
+fn render(output: &mut [f32], channels: usize, next_sample: &mut dyn FnMut() -> f32) {
+	for frame in output.chunks_mut(channels) {
+		let value = next_sample();
+		for sample in frame.iter_mut() {
+			*sample = value;
+		}
+	}
+}
+
+pub fn audio_main(state: Arc<GlobalState>) {
 	////////////////////////////////////////////////////////
 	// INIT CPAL CONFIG ////////////////////////////////////
 	////////////////////////////////////////////////////////
@@ -34,10 +47,13 @@ pub fn audio_main<'a>(buttonval: &'a AtomicCell<f32>) {
 	////////////////////////////////////////////////////////
 	// INIT OUTPUT STREAM //////////////////////////////////
 	////////////////////////////////////////////////////////
+	let mut render_closure = move || {
+		return state.button.load();
+	};
 	let _stream = device.build_output_stream(
 		&config,
 		move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
-			// react to stream events and read or write stream data here.
+			render(data, config.channels as usize, &mut render_closure)
 		},
 		move |err| {
 			// react to errors here.

@@ -13,3 +13,9 @@ edition = "2021"
 raylib = "3.7.0"
 cpal = "0.15.0"
 crossbeam-utils = "0.8.15"
+
+[profile.release]
+strip = true
+# opt-level = "s"
+lto = true
+panic = "abort"

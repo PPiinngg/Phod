@@ -1,10 +1,12 @@
 use std::{
 	ffi::{CStr, CString},
-	sync::atomic::AtomicBool,
+	sync::{atomic::{AtomicBool, Ordering}, Arc},
 };
 
 use crossbeam_utils::atomic::AtomicCell;
 use raylib::prelude::*;
+
+use crate::GlobalState;
 
 macro_rules! str2cstr {
 	($s:expr) => {
@@ -14,7 +16,7 @@ macro_rules! str2cstr {
 	};
 }
 
-pub fn ui_main<'a>(buttonval: &'a AtomicCell<f32>) {
+pub fn ui_main(state: Arc<GlobalState>) {
 	let (mut rl, thread) = raylib::init()
 		.size(640, 480)
 		.title(format!("Phod [v{}b]", env!("CARGO_PKG_VERSION")).as_str())
@@ -35,9 +37,9 @@ pub fn ui_main<'a>(buttonval: &'a AtomicCell<f32>) {
 			},
 			Some(str2cstr!("trig")),
 		) {
-			buttonval.store(0.5_f32);
+			state.button.store(1.0_f32);
 		} else {
-			buttonval.store(0.0_f32);
+			state.button.store(0.0_f32);
 		}
 	}
 }
